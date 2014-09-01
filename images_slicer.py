@@ -11,13 +11,16 @@ def parse_arguments():
     :return list of arguments
     """
 
-    parser = argparse.ArgumentParser(description="Multi-thread python app for slicing images")
-    parser.add_argument("folder", help="absolute path to the folder with images to slice")
+    parser = argparse.ArgumentParser(
+        description="Multi-thread python app for slicing images")
+    parser.add_argument("folder",
+                        help="absolute path to the folder with images to slice")
     parser.add_argument("-width", help="width of slice", type=int)
     parser.add_argument("-height", help="height of slice", type=int)
     parser.add_argument("-add", action="store_true",
-                        help="if size of the last slice is less than desired, add it to the previous slice")
-    parser.add_argument("-s", "--save_to", help="path to the folder where slices should be saved")
+                        help="add extra space to the last slice")
+    parser.add_argument("-s", "--save_to",
+                        help="path to the folder where slices should be saved")
 
     args = parser.parse_args()
     return args.folder, args.width, args.height, args.add, args.save_to
@@ -25,7 +28,7 @@ def parse_arguments():
 
 def check_arguments(t_folder, t_width, t_height, t_save_folder):
     """ Check arguments
-    :param t_folder: string with absolute path to the folder with images to slice
+    :param t_folder: string - absolute path to the folder with images to slice
     :param t_width: int width of the slice
     :param t_height: int height of the slice
     :param t_save_folder: string absolute path to folder for slices
@@ -76,7 +79,8 @@ def start_slicing(t_folder, t_width, t_height, t_add_small_slice, t_save_folder)
     :param t_folder: string with absolute path to the folder with images to slice
     :param t_width: int width of the slice
     :param t_height: int height of the slice
-    :param t_add_small_slice: boolean value If True and last slice is too small, add it to the previous
+    :param t_add_small_slice: boolean value If True and last slice is too
+     small, add it to the previous
     :param t_save_folder: string absolute path to folder for slices
     """
 
@@ -87,7 +91,11 @@ def start_slicing(t_folder, t_width, t_height, t_add_small_slice, t_save_folder)
     jobs = list()
     for i in range(cores_num):
         thread = multiprocessing.Process(target=slice_images,
-                                         args=(next(img_chunks), t_width, t_height, t_add_small_slice, t_save_folder))
+                                         args=(next(img_chunks),
+                                               t_width,
+                                               t_height,
+                                               t_add_small_slice,
+                                               t_save_folder))
         jobs.append(thread)
         thread.start()
 
@@ -96,7 +104,8 @@ def start_slicing(t_folder, t_width, t_height, t_add_small_slice, t_save_folder)
 
 
 def get_images_paths(t_folder):
-    """ Check if folder contains images (on the first level) and return their paths
+    """ Check if folder contains images (on the first level) and return
+     their paths
     :param t_folder: string with the absolute path to the folder
     :return: list with the absolute paths of the images in folder
     """
@@ -119,7 +128,8 @@ def get_images_paths(t_folder):
 def get_extension(t_path):
     """ Get extension of the file
     :param t_path: path or name of the file
-    :return: string with extension of the file or empty string if we failed to get it
+    :return: string with extension of the file or empty string if we failed
+     to get it
     """
 
     path_parts = str.split(t_path, '.')
@@ -142,22 +152,73 @@ def list_split(t_list, t_size):
 
 
 def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
-    """
+    """ Slicing images
     :param t_images: list of path to the images
     :param t_width: int width of the slice
     :param t_height: int height of the slice
-    :param t_add_small_slice: boolean value If True and last slice is too small, add it to the previous
+    :param t_add_small_slice: boolean value If True and last slice is too
+     small, add it to the previous
     :param t_save_folder: string absolute path to folder for slices
     """
 
     for img_path in t_images:
+        img = Image.open(img_path)
+        img_width, img_height = img.size
+
+        # Size of of image should bigger than a size of slice
+        min_number_of_slices = 1
+        # But if we can add extra space to the last slice, then size of image
+        # should be bigger than two slices.
+        if t_add_small_slice is True:
+            min_number_of_slices = 2
+
+        if (img_width // t_width < min_number_of_slices) or\
+                (img_height // t_height < min_number_of_slices):
+            print("Skip image " + img_path + " because it's too small")
+            continue
+
         path, name, extension = parse_image_path(img_path)
+        if 0 < len(t_save_folder):
+            path = t_save_folder
+
+        column = 0
+        row = 0
+        for hgt in range(0, img_height, t_height):
+            hgt_end = hgt + t_height
+            if img_height < hgt_end:
+                continue
+
+            if t_add_small_slice is True and\
+                    img_height < hgt_end + t_height:
+                hgt_end = img_height
+
+            for wdt in range(0, img_width, t_width):
+                wdt_end = wdt + t_width
+                if img_width < wdt_end:
+                    continue
+
+                if t_add_small_slice is True and\
+                        img_width < wdt_end + t_width:
+                    wdt_end = img_width
+
+                area = (wdt, hgt, wdt_end, hgt_end)
+                img_slice = img.crop(area)
+
+                filename = "{path}/{name}_{col:02d}_{row:02d}.{ext}".format(
+                    path=path, name=name, col=column, row=row, ext=extension)
+
+                img_slice.save(filename, extension)
+                column += 1
+
+            column = 0
+            row += 1
 
 
 def parse_image_path(t_img_path):
     """ Parse path to image and return it's parts: path, image name, extension
     :param t_img_path: string with path to image
-    :return: tuple of strings that hold path to image file, image name and image extension
+    :return: tuple of strings that hold path to image file, image name and
+     image extension
     """
 
     *path_parts, image_name = str.split(t_img_path, '/')
@@ -169,8 +230,15 @@ def parse_image_path(t_img_path):
 
 if __name__ == '__main__':
     arguments = parse_arguments()
-    isOk = check_arguments(arguments[0], arguments[1], arguments[2], arguments[4])
+    isOk = check_arguments(arguments[0],
+                           arguments[1],
+                           arguments[2],
+                           arguments[4])
     if isOk is True:
-        start_slicing(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4])
+        start_slicing(arguments[0],
+                      arguments[1],
+                      arguments[2],
+                      arguments[3],
+                      arguments[4])
     else:
         print("Invalid arguments. Try again!")
