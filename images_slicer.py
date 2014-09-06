@@ -15,12 +15,13 @@ def parse_arguments():
         description="Multi-thread python app for slicing images")
     parser.add_argument("folder",
                         help="absolute path to the folder with images to slice")
-    parser.add_argument("-width", help="width of slice", type=int)
-    parser.add_argument("-height", help="height of slice", type=int)
+    parser.add_argument("width", help="width of slice", type=int)
+    parser.add_argument("height", help="height of slice", type=int)
     parser.add_argument("-add", action="store_true",
                         help="add extra space to the last slice")
     parser.add_argument("-s", "--save_to",
-                        help="path to the folder where slices should be saved")
+                        help="path to the folder where slices should be saved",
+                        default="")
 
     args = parser.parse_args()
     return args.folder, args.width, args.height, args.add, args.save_to
@@ -43,9 +44,13 @@ def check_arguments(t_folder, t_width, t_height, t_save_folder):
         print("Error: Invalid slice size")
         return False
 
-    if check_folder_path(t_save_folder) is False:
-        print("Error: Invalid path to folder for slices - " + t_save_folder)
-        return False
+    if 0 < len(t_save_folder):
+        if check_folder_path(t_save_folder) is True:
+            if not os.path.exists(t_save_folder):
+                os.makedirs(t_save_folder)
+        else:
+            print("Error: Invalid path to folder for slices - " + t_save_folder)
+            return False
 
     return True
 
@@ -186,7 +191,7 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
         for hgt in range(0, img_height, t_height):
             hgt_end = hgt + t_height
             if img_height < hgt_end:
-                continue
+                break
 
             if t_add_small_slice is True and\
                     img_height < hgt_end + t_height:
@@ -195,7 +200,7 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
             for wdt in range(0, img_width, t_width):
                 wdt_end = wdt + t_width
                 if img_width < wdt_end:
-                    continue
+                    break
 
                 if t_add_small_slice is True and\
                         img_width < wdt_end + t_width:
@@ -204,10 +209,10 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
                 area = (wdt, hgt, wdt_end, hgt_end)
                 img_slice = img.crop(area)
 
-                filename = "{path}/{name}_{col:02d}_{row:02d}.{ext}".format(
+                filename = "{path}/{name}_{row:02d}_{col:02d}.{ext}".format(
                     path=path, name=name, col=column, row=row, ext=extension)
 
-                img_slice.save(filename, extension)
+                img_slice.save(filename)
                 column += 1
 
             column = 0
