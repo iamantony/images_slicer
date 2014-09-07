@@ -7,3 +7,12 @@ python:
   - "3.4"
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
+
+script: nosetests --with-coverage --cover-package=images_slicer
+
+after_success:
+    coveralls --verbose
+
+notifications:
+  email: false
