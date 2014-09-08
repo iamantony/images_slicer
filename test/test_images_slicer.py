@@ -18,16 +18,16 @@ class CheckArgumentsTest(unittest.TestCase):
         self.assertFalse(images_slicer.check_arguments("/invalid/folder", 1, 1, ""))
 
     def test_invalid_width(self):
-        self.assertTrue(images_slicer.check_arguments(SCRIPT_FOLDER, -10, 1, ""))
+        self.assertFalse(images_slicer.check_arguments(SCRIPT_FOLDER, -10, 1, ""))
 
     def test_invalid_height(self):
-        self.assertTrue(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, ""))
+        self.assertFalse(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, ""))
 
     def test_invalid_save_folder(self):
-        self.assertTrue(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, "../fake/"))
+        self.assertFalse(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, "../fake/"))
 
     def test_save_folder_creation(self):
-        self.assertTrue(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, TEST_SAVE_FOLDER))
+        self.assertTrue(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 1, TEST_SAVE_FOLDER))
 
     def tearDown(self):
         if os.path.exists(TEST_SAVE_FOLDER):
