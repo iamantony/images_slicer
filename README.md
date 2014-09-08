@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/iamantony/images_slicer.svg?branch=master)](https://travis-ci.org/iamantony/images_slicer)
+[![Build Status](https://travis-ci.org/iamantony/images_slicer.svg?branch=master)](https://travis-ci.org/iamantony/images_slicer)   [![Coverage Status](https://coveralls.io/repos/iamantony/images_slicer/badge.png)](https://coveralls.io/r/iamantony/images_slicer)
 
 images_slicer
 =============
