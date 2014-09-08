@@ -226,10 +226,14 @@ def parse_image_path(t_img_path):
      image extension
     """
 
-    *path_parts, image_name = str.split(t_img_path, '/')
+    img_path_parts = str.split(t_img_path, '/')
+    path_parts, image_name = img_path_parts[:-1], img_path_parts[-1:][0]
     path = "/".join(path_parts)
-    *image_name_parts, extension = str.split(image_name, '.')
+
+    img_name_parts = str.split(image_name, '.')
+    image_name_parts, extension = img_name_parts[:-1], img_name_parts[-1:][0]
     name = ".".join(image_name_parts)
+
     return path, name, extension
 
 
