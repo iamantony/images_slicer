@@ -7,7 +7,7 @@ import images_slicer
 
 
 SCRIPT_FOLDER = os.path.dirname(os.path.abspath(__file__))
-TEST_SAVE_FOLDER = SCRIPT_FOLDER + "test_folder"
+TEST_SAVE_FOLDER = SCRIPT_FOLDER + "/test_folder"
 
 
 class CheckArgumentsTest(unittest.TestCase):
@@ -24,7 +24,7 @@ class CheckArgumentsTest(unittest.TestCase):
         self.assertFalse(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, ""))
 
     def test_invalid_save_folder(self):
-        self.assertFalse(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 0, "../fake/"))
+        self.assertFalse(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 1, "../fake/"))
 
     def test_save_folder_creation(self):
         self.assertTrue(images_slicer.check_arguments(SCRIPT_FOLDER, 1, 1, TEST_SAVE_FOLDER))
