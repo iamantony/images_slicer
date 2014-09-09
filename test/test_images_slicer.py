@@ -37,5 +37,16 @@ class CheckArgumentsTest(unittest.TestCase):
                 print("Error during folder remove: {0}".format(err))
                 return
 
+
+class GetImagesPathsTest(unittest.TestCase):
+    def test_invalid_folder(self):
+        self.assertEqual(images_slicer.get_images_paths("../fake/"), list())
+
+    def test_valid_folder(self):
+        test_img_path = SCRIPT_FOLDER + "/test.png"
+        test_img_path = os.path.normpath(test_img_path)
+        paths = [test_img_path]
+        self.assertEqual(images_slicer.get_images_paths(SCRIPT_FOLDER), paths)
+
 if __name__ == "__main__":
     unittest.main()
