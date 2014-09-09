@@ -226,9 +226,9 @@ def parse_image_path(t_img_path):
      image extension
     """
 
-    img_path_parts = str.split(t_img_path, '/')
+    img_path_parts = str.split(t_img_path, os.sep)
     path_parts, image_name = img_path_parts[:-1], img_path_parts[-1]
-    path = "/".join(path_parts)
+    path = os.sep.join(path_parts)
 
     img_name_parts = str.split(image_name, '.')
     image_name_parts, extension = img_name_parts[:-1], img_name_parts[-1]

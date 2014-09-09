@@ -48,5 +48,28 @@ class GetImagesPathsTest(unittest.TestCase):
         paths = [test_img_path]
         self.assertEqual(images_slicer.get_images_paths(SCRIPT_FOLDER), paths)
 
+
+class GetExtensionTest(unittest.TestCase):
+    def test_get_extension(self):
+        test_img_path = SCRIPT_FOLDER + "/test.png"
+        test_img_path = os.path.normpath(test_img_path)
+        self.assertEqual(images_slicer.get_extension(test_img_path), "png")
+
+    def test_get_extension_several_dots(self):
+        test_img_path = SCRIPT_FOLDER + "/test.hey.jpeg"
+        test_img_path = os.path.normpath(test_img_path)
+        self.assertEqual(images_slicer.get_extension(test_img_path), "jpeg")
+
+
+class ParsePathTest(unittest.TestCase):
+    def test_get_parts(self):
+        test_img_path = SCRIPT_FOLDER + "/test.png"
+        test_img_path = os.path.normpath(test_img_path)
+        self.assertEqual(images_slicer.parse_image_path(test_img_path), (SCRIPT_FOLDER, "test", "png"))
+
+        test_img_path = SCRIPT_FOLDER + "/test.hey.png"
+        test_img_path = os.path.normpath(test_img_path)
+        self.assertEqual(images_slicer.parse_image_path(test_img_path), (SCRIPT_FOLDER, "test.hey", "png"))
+
 if __name__ == "__main__":
     unittest.main()
