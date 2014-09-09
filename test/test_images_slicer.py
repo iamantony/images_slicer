@@ -67,7 +67,8 @@ class ParsePathTest(unittest.TestCase):
         self.assertEqual(images_slicer.parse_image_path(TEST_IMG_PATH),
                          (SCRIPT_FOLDER, "test", "png"))
 
-        self.assertEqual(images_slicer.parse_image_path(TEST_IMG_PATH),
+        test_img_path = SCRIPT_FOLDER + str(os.sep) + "test.hey.png"
+        self.assertEqual(images_slicer.parse_image_path(test_img_path),
                          (SCRIPT_FOLDER, "test.hey", "png"))
 
 
