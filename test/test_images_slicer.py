@@ -107,8 +107,9 @@ class ImagesSlicingTest(unittest.TestCase):
         for path in slices_paths:
             img = Image.open(path)
             slice_wdt, slice_hgt = img.size
-            self.assertIn(slice_wdt, [width, big_width])
-            self.assertIn(slice_hgt, [height, big_height])
+            if slice_wdt not in [width, big_width] or\
+                    slice_hgt not in [height, big_height]:
+                self.fail("Wrong slice size")
 
     def test_slicing_with_add_and_folder(self):
         width, height = 200, 100
@@ -121,8 +122,9 @@ class ImagesSlicingTest(unittest.TestCase):
         for path in slices_paths:
             img = Image.open(path)
             slice_wdt, slice_hgt = img.size
-            self.assertIn(slice_wdt, [width, big_width])
-            self.assertIn(slice_hgt, [height, big_height])
+            if slice_wdt not in [width, big_width] or\
+                    slice_hgt not in [height, big_height]:
+                self.fail("Wrong slice size")
 
     def test_big_slice(self):
         width, height = 1000, 1000
@@ -146,9 +148,8 @@ class ImagesSlicingTest(unittest.TestCase):
             slices = images_slicer.get_images_paths(TEST_SAVE_FOLDER)
             filtered_paths.extend(slices)
 
-        remover = map(os.remove, filtered_paths)
-        for i in range(len(filtered_paths)):
-            next(remover)
+        for path in filtered_paths:
+            os.remove(path)
 
         if os.path.exists(TEST_SAVE_FOLDER):
             shutil.rmtree(TEST_SAVE_FOLDER, True)
@@ -176,9 +177,8 @@ class StartSlicingTest(unittest.TestCase):
             slices = images_slicer.get_images_paths(TEST_SAVE_FOLDER)
             filtered_paths.extend(slices)
 
-        remover = map(os.remove, filtered_paths)
-        for i in range(len(filtered_paths)):
-            next(remover)
+        for path in filtered_paths:
+            os.remove(path)
 
         if os.path.exists(TEST_SAVE_FOLDER):
             shutil.rmtree(TEST_SAVE_FOLDER, True)
