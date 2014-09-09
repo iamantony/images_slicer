@@ -79,9 +79,11 @@ def check_folder_path(t_path):
     return False
 
 
-def start_slicing(t_folder, t_width, t_height, t_add_small_slice, t_save_folder):
+def start_slicing(t_folder, t_width, t_height, t_add_small_slice,
+                  t_save_folder):
     """ Slice images
-    :param t_folder: string with absolute path to the folder with images to slice
+    :param t_folder: string with absolute path to the folder with images
+     to slice
     :param t_width: int width of the slice
     :param t_height: int height of the slice
     :param t_add_small_slice: boolean value If True and last slice is too
@@ -165,8 +167,10 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
     :param t_add_small_slice: boolean value If True and last slice is too
      small, add it to the previous
     :param t_save_folder: string absolute path to folder for slices
+    :return list: created slices paths
     """
 
+    slices_paths = list()
     for img_path in t_images:
         img = Image.open(img_path)
         img_width, img_height = img.size
@@ -214,10 +218,13 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
                     path=path, name=name, col=column, row=row, ext=extension)
 
                 img_slice.save(filename)
+                slices_paths.append(filename)
                 column += 1
 
             column = 0
             row += 1
+
+    return slices_paths
 
 
 def parse_image_path(t_img_path):
