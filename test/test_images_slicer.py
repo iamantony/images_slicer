@@ -71,5 +71,21 @@ class ParsePathTest(unittest.TestCase):
         test_img_path = os.path.normpath(test_img_path)
         self.assertEqual(images_slicer.parse_image_path(test_img_path), (SCRIPT_FOLDER, "test.hey", "png"))
 
+
+class ListSplitTest(unittest.TestCase):
+    def test_simple_list(self):
+        simple = [1, 2, 3]
+        result = images_slicer.list_split(simple, len(simple))
+        for i in range(len(simple)):
+            self.assertEqual(next(result), simple[i:i+1])
+
+    def test_big_list(self):
+        big_list = [1, 2, 3, 4, 5]
+        result = images_slicer.list_split(big_list, 3)
+        self.assertEqual(next(result), big_list[0:1])
+        self.assertEqual(next(result), big_list[1:2])
+        self.assertEqual(next(result), big_list[2:])
+        self.assertRaises(StopIteration, lambda: next(result))
+
 if __name__ == "__main__":
     unittest.main()

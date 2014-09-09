@@ -144,7 +144,7 @@ def get_extension(t_path):
 
 
 def list_split(t_list, t_size):
-    """ Generator that split list of elements in n chunks
+    """ Generator that split list of elements into n chunks
     :param t_list - list of elements
     :param t_size - size of chunk
     :return generator of lists of chunks
@@ -152,7 +152,8 @@ def list_split(t_list, t_size):
 
     new_length = int(len(t_list) / t_size)
     for i in range(0, t_size - 1):
-        yield t_list[i * new_length:i * new_length + new_length]
+        start = i * new_length
+        yield t_list[start: start + new_length]
     yield t_list[t_size * new_length - new_length:]
 
 
