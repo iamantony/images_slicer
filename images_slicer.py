@@ -172,6 +172,8 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
 
     slices_paths = list()
     for img_path in t_images:
+        print("Slicing " + img_path)
+
         img = Image.open(img_path)
         img_width, img_height = img.size
 
