@@ -187,6 +187,7 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
         if (img_width // t_width < min_number_of_slices) or\
                 (img_height // t_height < min_number_of_slices):
             print("Skip image " + img_path + " because it's too small")
+            img.close()
             continue
 
         path, name, extension = parse_image_path(img_path)
@@ -216,8 +217,9 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
                 area = (wdt, hgt, wdt_end, hgt_end)
                 img_slice = img.crop(area)
 
-                filename = "{path}/{name}_{row:02d}_{col:02d}.{ext}".format(
-                    path=path, name=name, col=column, row=row, ext=extension)
+                filename = "{path}{sep}{name}_{row:02d}_{col:02d}.{ext}".format(
+                    path=path, sep=str(os.sep), name=name, col=column, row=row,
+                    ext=extension)
 
                 img_slice.save(filename)
                 slices_paths.append(filename)
@@ -225,6 +227,8 @@ def slice_images(t_images, t_width, t_height, t_add_small_slice, t_save_folder):
 
             column = 0
             row += 1
+
+        img.close()
 
     return slices_paths
 
