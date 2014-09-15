@@ -7,6 +7,10 @@ Multi-thread python app for slicing images.
 
 Start point - [0, 0] - upper left corner of the image.
 
+Tags
+=======================
+python, image, processing, slice, slicing, multithread
+
 Usage
 =======================
 
