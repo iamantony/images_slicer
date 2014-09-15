@@ -3,7 +3,7 @@
 images_slicer
 =============
 
-Multi-thread python app for slicing images.
+Multi-thread Python app for slicing images.
 
 Start point - [0, 0] - upper left corner of the image.
 
@@ -45,6 +45,8 @@ Show help:
     
 Requirements
 =======================
+
+Python >= 2.6
 
 Pillow (PIL) library
 
