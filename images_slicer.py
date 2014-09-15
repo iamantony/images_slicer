@@ -8,7 +8,7 @@ from PIL import Image
 
 def parse_arguments():
     """ Parse arguments and start slice process
-    :return list of arguments
+    :return tuple of arguments
     """
 
     parser = argparse.ArgumentParser(
@@ -249,11 +249,11 @@ def parse_image_path(t_img_path):
 
 if __name__ == '__main__':
     arguments = parse_arguments()
-    isOk = check_arguments(arguments[0],
+    is_ok = check_arguments(arguments[0],
                            arguments[1],
                            arguments[2],
                            arguments[4])
-    if isOk is True:
+    if is_ok is True:
         start_slicing(arguments[0],
                       arguments[1],
                       arguments[2],

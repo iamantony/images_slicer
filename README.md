@@ -14,13 +14,13 @@ python, image, processing, slice, slicing, multithread
 Usage
 =======================
 
-    $ images_slicer PATH_TO_FOLDER WIDTH HEIGHT -ADD -RESULTS_FOLDER
+    $python images_slicer.py PATH_TO_FOLDER WIDTH HEIGHT -ADD -S RESULTS_FOLDER
 
 * PATH_TO_FOLDER - absolute path to the folder with images that you want to slice
 * WIDTH - width of the slice
 * HEIGHT - height of the slice
-* -ADD - add extra space at the last slice (optional)
-* -RESULTS_FOLDER - absolute path where slices should be saved (optional)
+* -ADD - (optional) add extra space at the last slice. If not set, extra space will be omitted (see examples).
+* -RESULTS_FOLDER - (optional) absolute path where slices should be saved. If not set, slice images will be saved at folder PATH_TO_FOLDER.
 
 Examples
 =======================
